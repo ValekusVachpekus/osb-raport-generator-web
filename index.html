@@ -7,63 +7,141 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:        #0f1117;
+      --bg2:       #181b24;
+      --bg3:       #1e2130;
+      --border:    #2a2f45;
+      --border-h:  #3d4466;
+      --text:      #e2e6f0;
+      --text-dim:  #8b92a8;
+      --accent:    #5b7cfa;
+      --accent-h:  #7b96ff;
+
+      --green:  #2ecc71;
+      --blue:   #3b82f6;
+      --red:    #ef4444;
+      --orange: #f97316;
+      --purple: #a855f7;
+      --teal:   #14b8a6;
+      --gray:   #6b7280;
+    }
+
+    html { font-size: 14px; }
+
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      font-size: 14px;
-      background: #f0f0f0;
-      color: #222;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      padding: 12px;
+      padding: 24px 16px 48px;
     }
 
-    h1 {
-      font-size: 17px;
-      margin-bottom: 12px;
-      color: #333;
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
     }
 
+    .logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 18px rgba(91,124,250,.35);
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -.3px;
+    }
+
+    header p {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 1px;
+    }
+
+    /* ── Cards ──────────────────────────────────────────────── */
     .card {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 12px 14px;
-      margin-bottom: 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      transition: border-color .2s;
     }
 
-    .card legend, .card-title {
-      font-weight: bold;
+    .card:hover { border-color: var(--border-h); }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 13px;
-      margin-bottom: 8px;
-      color: #444;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      margin-bottom: 14px;
     }
 
+    .card-title span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: var(--bg3);
+      border-radius: 7px;
+      font-size: 14px;
+    }
+
+    /* ── Form elements ──────────────────────────────────────── */
     label {
       display: block;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 3px;
-      margin-top: 8px;
-      color: #444;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 5px;
+      margin-top: 12px;
+      letter-spacing: .3px;
     }
 
-    label:first-child { margin-top: 0; }
+    label:first-of-type { margin-top: 0; }
 
-    input[type="text"], input[type="url"], textarea {
+    input[type="text"],
+    input[type="url"],
+    textarea {
       width: 100%;
-      padding: 5px 8px;
-      border: 1px solid #bbb;
-      border-radius: 4px;
+      padding: 8px 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       font-family: inherit;
       font-size: 13px;
-      background: #fff;
-      color: #222;
-      transition: border-color .15s;
+      color: var(--text);
+      outline: none;
+      transition: border-color .18s, box-shadow .18s;
     }
 
-    input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
-      border-color: #888;
-      outline: none;
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91,124,250,.18);
     }
+
+    input::placeholder, textarea::placeholder { color: #4a5068; }
 
     textarea { resize: vertical; }
 
@@ -77,179 +155,259 @@
     .row > .field { flex: 1; min-width: 140px; }
     .row > .field-sm { flex: 0 0 auto; min-width: 120px; }
 
-    /* Buttons */
+    /* ── Buttons ────────────────────────────────────────────── */
     .btn {
+      position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 5px 12px;
+      gap: 7px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 4px;
+      border-radius: 9px;
       font-family: inherit;
       font-size: 13px;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      transition: opacity .15s, filter .15s;
+      letter-spacing: .2px;
+      overflow: hidden;
+      transition: transform .15s, box-shadow .15s, filter .15s;
     }
-    .btn:hover { filter: brightness(1.1); }
-    .btn:active { filter: brightness(.95); }
 
-    .btn-green  { background: #4CAF50; color: #fff; }
-    .btn-blue   { background: #2196F3; color: #fff; }
-    .btn-red    { background: #f44336; color: #fff; }
-    .btn-orange { background: #FF9800; color: #fff; }
-    .btn-purple { background: #9C27B0; color: #fff; }
-    .btn-gray   { background: #607D8B; color: #fff; }
+    /* ripple */
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,.12);
+      opacity: 0;
+      border-radius: inherit;
+      transition: opacity .25s;
+    }
+
+    .btn:hover::after  { opacity: 1; }
+    .btn:active { transform: scale(.96); }
+    .btn:hover  { transform: translateY(-1px); }
+
+    .btn-icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .btn-green  { background: linear-gradient(135deg,#1a9e55,#2ecc71); color:#fff; box-shadow:0 4px 14px rgba(46,204,113,.25); }
+    .btn-blue   { background: linear-gradient(135deg,#1d4ed8,#3b82f6); color:#fff; box-shadow:0 4px 14px rgba(59,130,246,.25); }
+    .btn-red    { background: linear-gradient(135deg,#b91c1c,#ef4444); color:#fff; box-shadow:0 4px 14px rgba(239,68,68,.25); }
+    .btn-orange { background: linear-gradient(135deg,#c2510f,#f97316); color:#fff; box-shadow:0 4px 14px rgba(249,115,22,.3); }
+    .btn-purple { background: linear-gradient(135deg,#7e22ce,#a855f7); color:#fff; box-shadow:0 4px 14px rgba(168,85,247,.25); }
+    .btn-teal   { background: linear-gradient(135deg,#0d7268,#14b8a6); color:#fff; box-shadow:0 4px 14px rgba(20,184,166,.25); }
+    .btn-gray   { background: linear-gradient(135deg,#374151,#6b7280); color:#fff; box-shadow:0 4px 14px rgba(107,114,128,.2); }
 
     .btn-row {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 10px;
     }
 
-    /* Attachments */
+    /* ── Attachments ────────────────────────────────────────── */
     .att-row {
       display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 5px;
+      align-items: flex-end;
+      gap: 8px;
+      margin-bottom: 8px;
       flex-wrap: wrap;
+      padding: 10px 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: border-color .18s;
+      animation: slideIn .22s ease;
+    }
+
+    .att-row:hover { border-color: var(--border-h); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     .att-num {
-      font-size: 13px;
-      color: #666;
+      font-size: 12px;
+      color: var(--text-dim);
       min-width: 20px;
       text-align: right;
+      padding-bottom: 7px;
+      font-weight: 700;
     }
 
-    .att-name { flex: 0 0 200px; min-width: 120px; }
+    .att-name { flex: 0 0 210px; min-width: 120px; }
     .att-url  { flex: 1; min-width: 150px; }
 
     .att-row label {
-      margin: 0;
-      font-size: 12px;
-      font-weight: normal;
-      color: #555;
+      margin: 0 0 4px;
+      font-size: 11px;
     }
 
-    .att-field {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .att-field { display: flex; flex-direction: column; gap: 0; }
+
+    /* ── Divider ────────────────────────────────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin: 14px 0 8px;
     }
 
-    /* Output */
+    /* ── Output ─────────────────────────────────────────────── */
     #output {
       width: 100%;
-      height: 180px;
-      font-family: "Courier New", monospace;
+      height: 200px;
+      font-family: "Cascadia Code", "Fira Code", "Courier New", monospace;
       font-size: 12px;
-      background: #1e1e1e;
-      color: #d4d4d4;
-      border: 1px solid #555;
-      border-radius: 4px;
-      padding: 8px;
+      background: #0a0d14;
+      color: #a8b5d8;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
       resize: vertical;
       white-space: pre;
       overflow: auto;
+      line-height: 1.6;
+      transition: border-color .18s;
     }
 
-    /* Toast */
+    #output:focus { border-color: var(--accent); outline: none; }
+
+    /* ── Actions row ────────────────────────────────────────── */
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding: 16px 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    /* ── Toast ──────────────────────────────────────────────── */
     #toast {
       position: fixed;
-      bottom: 24px;
+      bottom: 28px;
       left: 50%;
-      transform: translateX(-50%) translateY(30px);
-      background: #333;
-      color: #fff;
-      padding: 8px 20px;
-      border-radius: 20px;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bg3);
+      border: 1px solid var(--border-h);
+      color: var(--text);
+      padding: 10px 22px;
+      border-radius: 30px;
       font-size: 13px;
+      font-weight: 500;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .25s, transform .25s;
+      transition: opacity .22s, transform .22s;
       z-index: 999;
+      box-shadow: 0 8px 30px rgba(0,0,0,.5);
+      backdrop-filter: blur(8px);
     }
 
     #toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* ── Scrollbar ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-h); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #5b6280; }
   </style>
 </head>
 <body>
 
-<h1>📋 Конструктор рапорта ОСБ</h1>
+<header>
+  <div class="logo">📋</div>
+  <div>
+    <h1>Конструктор рапорта ОСБ</h1>
+    <p>Генератор BB-кода для форумных публикаций</p>
+  </div>
+</header>
 
 <!-- НАСТРОЙКИ -->
 <div class="card">
-  <div class="card-title">⚙️ Настройки (сохраняются в браузере)</div>
+  <div class="card-title"><span>⚙️</span> Настройки</div>
 
-  <label for="position_fio">Должность и ФИО полностью:</label>
+  <label for="position_fio">Должность и ФИО полностью</label>
   <input type="text" id="position_fio" placeholder="оперуполномоченный ОСБ Иванов Иван Иванович" />
 
-  <div class="row" style="margin-top:8px;">
+  <div class="row" style="margin-top:4px;">
     <div class="field-sm">
-      <label for="signature">Подпись:</label>
+      <label for="signature">Подпись</label>
       <input type="text" id="signature" placeholder="Иванов" />
     </div>
     <div class="field">
-      <label for="fio_short">ФИО для подписи:</label>
+      <label for="fio_short">ФИО для подписи</label>
       <input type="text" id="fio_short" placeholder="Иванов И. И." />
     </div>
     <div style="padding-bottom:1px;">
-      <button class="btn btn-green" onclick="saveConfig()">💾 Сохранить</button>
+      <button class="btn btn-green" onclick="saveConfig()">
+        <span class="btn-icon">💾</span> Сохранить
+      </button>
     </div>
   </div>
 </div>
 
 <!-- ПОЛЯ РАПОРТА -->
 <div class="card">
-  <div class="card-title">📝 Поля рапорта</div>
+  <div class="card-title"><span>📝</span> Поля рапорта</div>
 
-  <label for="subject">О чём (нарушении устава ОВД, нарушении законодательства):</label>
+  <label for="subject">О чём (нарушении устава ОВД, нарушении законодательства)</label>
   <input type="text" id="subject" placeholder="нарушении п. X устава ОВД..." />
 
-  <label for="basis">Основание рапорта (подробно: дата, суть, ссылки на законы):</label>
+  <label for="basis">Основание рапорта (подробно: дата, суть, ссылки на законы)</label>
   <textarea id="basis" rows="6" placeholder="Дата, описание события, ссылки на статьи законов..."></textarea>
 
-  <label for="request">Прошу руководство ГАИ:</label>
+  <label for="request">Прошу руководство ГАИ</label>
   <textarea id="request" rows="3" placeholder="провести проверку и привлечь к ответственности..."></textarea>
 </div>
 
 <!-- ПРИЛОЖЕНИЯ -->
 <div class="card">
-  <div class="card-title">📎 Приложения</div>
+  <div class="card-title"><span>📎</span> Приложения</div>
 
-  <div class="att-row">
-    <div class="att-field" style="flex:1;">
-      <label for="usb_url">Перенос доказательств на USB-Flash — URL:</label>
-      <input type="url" id="usb_url" placeholder="https://..." />
-    </div>
-  </div>
+  <label for="usb_url">Перенос доказательств на USB-Flash — URL</label>
+  <input type="url" id="usb_url" placeholder="https://..." />
 
-  <div style="font-weight:bold; font-size:13px; margin: 10px 0 6px; color:#444;">Фото/видео фиксации:</div>
+  <div class="section-label">Фото / видео фиксации</div>
   <div id="att-container"></div>
 
-  <div class="btn-row">
-    <button class="btn btn-blue" onclick="addAttachment()">＋ Добавить</button>
-    <button class="btn btn-red"  onclick="removeLastAttachment()">－ Удалить последнее</button>
+  <div class="btn-row" style="margin-top:10px;">
+    <button class="btn btn-blue" onclick="addAttachment()">
+      <span class="btn-icon">＋</span> Добавить
+    </button>
+    <button class="btn btn-red" onclick="removeLastAttachment()">
+      <span class="btn-icon">－</span> Удалить последнее
+    </button>
   </div>
 </div>
 
-<!-- КНОПКИ ДЕЙСТВИЙ -->
-<div class="btn-row" style="margin-bottom:12px;">
-  <button class="btn btn-orange" onclick="generate()">⚡ Сгенерировать BB-код</button>
-  <button class="btn btn-purple" onclick="copyToClipboard()">📋 Скопировать в буфер</button>
-  <button class="btn btn-gray"   onclick="clearOutput()">🗑 Очистить вывод</button>
+<!-- ДЕЙСТВИЯ -->
+<div class="actions">
+  <button class="btn btn-orange" onclick="generate()">
+    <span class="btn-icon">⚡</span> Сгенерировать BB-код
+  </button>
+  <button class="btn btn-purple" onclick="copyToClipboard()">
+    <span class="btn-icon">📋</span> Скопировать в буфер
+  </button>
+  <button class="btn btn-gray" onclick="clearOutput()">
+    <span class="btn-icon">🗑</span> Очистить вывод
+  </button>
 </div>
 
 <!-- ВЫВОД -->
 <div class="card">
-  <div class="card-title">📄 Готовый BB-код (для вставки на форум)</div>
+  <div class="card-title"><span>📄</span> Готовый BB-код</div>
   <textarea id="output" readonly placeholder="Нажмите «Сгенерировать BB-код»..."></textarea>
 </div>
 
@@ -259,16 +417,13 @@
   const STORAGE_KEY = "osb_raport_config";
 
   const MONTHS_RU = [
-    "", "января","февраля","марта","апреля","мая","июня",
+    "","января","февраля","марта","апреля","мая","июня",
     "июля","августа","сентября","октября","ноября","декабря"
   ];
 
-  // ── Config ────────────────────────────────────────────────────
   function loadConfig() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch (_) {}
+    try { const r = localStorage.getItem(STORAGE_KEY); if (r) return JSON.parse(r); }
+    catch (_) {}
     return {};
   }
 
@@ -289,41 +444,41 @@
     if (cfg.fio_short)    document.getElementById("fio_short").value    = cfg.fio_short;
   }
 
-  // ── Attachments ───────────────────────────────────────────────
   let attCount = 0;
 
   function addAttachment() {
     attCount++;
     const idx = attCount;
     const container = document.getElementById("att-container");
-
     const row = document.createElement("div");
     row.className = "att-row";
     row.dataset.idx = idx;
-
     row.innerHTML = `
       <span class="att-num">${idx}.</span>
       <div class="att-field att-name">
-        <label>Название:</label>
+        <label>Название</label>
         <input type="text" class="att-name-input" value="Доказательства №${idx}" />
       </div>
       <div class="att-field att-url">
-        <label>URL:</label>
+        <label>URL</label>
         <input type="url" class="att-url-input" placeholder="https://..." />
       </div>
     `;
-
     container.appendChild(row);
   }
 
   function removeLastAttachment() {
     const container = document.getElementById("att-container");
     const rows = container.querySelectorAll(".att-row");
-    if (rows.length === 0) return;
-    container.removeChild(rows[rows.length - 1]);
+    if (!rows.length) return;
+    const last = rows[rows.length - 1];
+    last.style.animation = "none";
+    last.style.transition = "opacity .18s, transform .18s";
+    last.style.opacity = "0";
+    last.style.transform = "translateY(-6px)";
+    setTimeout(() => last.remove(), 180);
   }
 
-  // ── Generate ──────────────────────────────────────────────────
   function generate() {
     const positionFio = document.getElementById("position_fio").value.trim() || "[Должность и ФИО не указаны]";
     const signature   = document.getElementById("signature").value.trim()    || "________________";
@@ -333,12 +488,11 @@
     const request     = document.getElementById("request").value.trim()      || "[требования не указаны]";
     const usbUrl      = document.getElementById("usb_url").value.trim();
 
-    const now   = new Date();
-    const day   = String(now.getDate());
+    const now = new Date();
+    const day = String(now.getDate());
     const month = MONTHS_RU[now.getMonth() + 1];
     const yearFull = String(now.getFullYear());
 
-    // Attachments
     const attLines = [];
     document.querySelectorAll("#att-container .att-row").forEach(row => {
       const name = row.querySelector(".att-name-input").value.trim();
@@ -347,11 +501,8 @@
       else if (name)    attLines.push(`${name} — [ссылка не указана]`);
     });
 
-    if (usbUrl) {
-      attLines.push(`[URL=${usbUrl}]Перенос доказательств на USB-Flash[/URL]`);
-    } else {
-      attLines.push("Перенос доказательств на USB-Flash — [ссылка не указана]");
-    }
+    if (usbUrl) attLines.push(`[URL=${usbUrl}]Перенос доказательств на USB-Flash[/URL]`);
+    else        attLines.push("Перенос доказательств на USB-Flash — [ссылка не указана]");
 
     const attachmentsBb = attLines.join("\n");
 
@@ -374,27 +525,26 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
 [/RIGHT]`;
 
     document.getElementById("output").value = bb;
+    showToast("✅ BB-код сгенерирован");
   }
 
-  // ── Clipboard ─────────────────────────────────────────────────
   async function copyToClipboard() {
     const content = document.getElementById("output").value.trim();
     if (!content) { showToast("⚠️ Сначала сгенерируйте BB-код"); return; }
     try {
       await navigator.clipboard.writeText(content);
-      showToast("✅ BB-код скопирован в буфер обмена");
     } catch (_) {
       document.getElementById("output").select();
       document.execCommand("copy");
-      showToast("✅ Скопировано");
     }
+    showToast("✅ BB-код скопирован в буфер обмена");
   }
 
   function clearOutput() {
     document.getElementById("output").value = "";
+    showToast("🗑 Вывод очищен");
   }
 
-  // ── Toast ─────────────────────────────────────────────────────
   let toastTimer = null;
   function showToast(msg) {
     const el = document.getElementById("toast");
@@ -404,7 +554,6 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
   }
 
-  // ── Init ──────────────────────────────────────────────────────
   applyConfig();
   addAttachment();
 </script>
