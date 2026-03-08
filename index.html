@@ -363,7 +363,7 @@
   <div class="card-title"><span>📝</span> Поля рапорта</div>
 
   <label for="subject">О чём (нарушении устава ОВД, нарушении законодательства)</label>
-  <input type="text" id="subject" placeholder="нарушении п. X устава ОВД..." />
+  <input type="text" id="subject" placeholder="о нарушении устава ОВД/о нарушении законодательства..." />
 
   <label for="basis">Основание рапорта (подробно: дата, суть, ссылки на законы)</label>
   <textarea id="basis" rows="6" placeholder="Дата, описание события, ссылки на статьи законов..."></textarea>
@@ -483,7 +483,7 @@
     const positionFio = document.getElementById("position_fio").value.trim() || "[Должность и ФИО не указаны]";
     const signature   = document.getElementById("signature").value.trim()    || "________________";
     const fioShort    = document.getElementById("fio_short").value.trim()    || "[ФИО]";
-    const subject     = document.getElementById("subject").value.trim()      || "[суть нарушения не указана]";
+    const subject     = document.getElementById("subject").value.trim()      || "о нарушении устава ОВД";
     const basis       = document.getElementById("basis").value.trim()        || "[основание не указано]";
     const request     = document.getElementById("request").value.trim()      || "[требования не указаны]";
     const usbUrl      = document.getElementById("usb_url").value.trim();
