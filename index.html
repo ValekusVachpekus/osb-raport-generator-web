@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Конструктор рапорта ОСБ</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+      background: #f0f0f0;
+      color: #222;
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    h1 {
+      font-size: 17px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .card legend, .card-title {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 3px;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    label:first-child { margin-top: 0; }
+
+    input[type="text"], input[type="url"], textarea {
+      width: 100%;
+      padding: 5px 8px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 13px;
+      background: #fff;
+      color: #222;
+      transition: border-color .15s;
+    }
+
+    input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
+      border-color: #888;
+      outline: none;
+    }
+
+    textarea { resize: vertical; }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .row > .field { flex: 1; min-width: 140px; }
+    .row > .field-sm { flex: 0 0 auto; min-width: 120px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border: none;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity .15s, filter .15s;
+    }
+    .btn:hover { filter: brightness(1.1); }
+    .btn:active { filter: brightness(.95); }
+
+    .btn-green  { background: #4CAF50; color: #fff; }
+    .btn-blue   { background: #2196F3; color: #fff; }
+    .btn-red    { background: #f44336; color: #fff; }
+    .btn-orange { background: #FF9800; color: #fff; }
+    .btn-purple { background: #9C27B0; color: #fff; }
+    .btn-gray   { background: #607D8B; color: #fff; }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* Attachments */
+    .att-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+    }
+
+    .att-num {
+      font-size: 13px;
+      color: #666;
+      min-width: 20px;
+      text-align: right;
+    }
+
+    .att-name { flex: 0 0 200px; min-width: 120px; }
+    .att-url  { flex: 1; min-width: 150px; }
+
+    .att-row label {
+      margin: 0;
+      font-size: 12px;
+      font-weight: normal;
+      color: #555;
+    }
+
+    .att-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* Output */
+    #output {
+      width: 100%;
+      height: 180px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 8px;
+      resize: vertical;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: #333;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      z-index: 999;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<h1>📋 Конструктор рапорта ОСБ</h1>
+
+<!-- НАСТРОЙКИ -->
+<div class="card">
+  <div class="card-title">⚙️ Настройки (сохраняются в браузере)</div>
+
+  <label for="position_fio">Должность и ФИО полностью:</label>
+  <input type="text" id="position_fio" placeholder="оперуполномоченный ОСБ Иванов Иван Иванович" />
+
+  <div class="row" style="margin-top:8px;">
+    <div class="field-sm">
+      <label for="signature">Подпись:</label>
+      <input type="text" id="signature" placeholder="Иванов" />
+    </div>
+    <div class="field">
+      <label for="fio_short">ФИО для подписи:</label>
+      <input type="text" id="fio_short" placeholder="Иванов И. И." />
+    </div>
+    <div style="padding-bottom:1px;">
+      <button class="btn btn-green" onclick="saveConfig()">💾 Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ПОЛЯ РАПОРТА -->
+<div class="card">
+  <div class="card-title">📝 Поля рапорта</div>
+
+  <label for="subject">О чём (нарушении устава ОВД, нарушении законодательства):</label>
+  <input type="text" id="subject" placeholder="нарушении п. X устава ОВД..." />
+
+  <label for="basis">Основание рапорта (подробно: дата, суть, ссылки на законы):</label>
+  <textarea id="basis" rows="6" placeholder="Дата, описание события, ссылки на статьи законов..."></textarea>
+
+  <label for="request">Прошу руководство ГАИ:</label>
+  <textarea id="request" rows="3" placeholder="провести проверку и привлечь к ответственности..."></textarea>
+</div>
+
+<!-- ПРИЛОЖЕНИЯ -->
+<div class="card">
+  <div class="card-title">📎 Приложения</div>
+
+  <div class="att-row">
+    <div class="att-field" style="flex:1;">
+      <label for="usb_url">Перенос доказательств на USB-Flash — URL:</label>
+      <input type="url" id="usb_url" placeholder="https://..." />
+    </div>
+  </div>
+
+  <div style="font-weight:bold; font-size:13px; margin: 10px 0 6px; color:#444;">Фото/видео фиксации:</div>
+  <div id="att-container"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-blue" onclick="addAttachment()">＋ Добавить</button>
+    <button class="btn btn-red"  onclick="removeLastAttachment()">－ Удалить последнее</button>
+  </div>
+</div>
+
+<!-- КНОПКИ ДЕЙСТВИЙ -->
+<div class="btn-row" style="margin-bottom:12px;">
+  <button class="btn btn-orange" onclick="generate()">⚡ Сгенерировать BB-код</button>
+  <button class="btn btn-purple" onclick="copyToClipboard()">📋 Скопировать в буфер</button>
+  <button class="btn btn-gray"   onclick="clearOutput()">🗑 Очистить вывод</button>
+</div>
+
+<!-- ВЫВОД -->
+<div class="card">
+  <div class="card-title">📄 Готовый BB-код (для вставки на форум)</div>
+  <textarea id="output" readonly placeholder="Нажмите «Сгенерировать BB-код»..."></textarea>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const STORAGE_KEY = "osb_raport_config";
+
+  const MONTHS_RU = [
+    "", "января","февраля","марта","апреля","мая","июня",
+    "июля","августа","сентября","октября","ноября","декабря"
+  ];
+
+  // ── Config ────────────────────────────────────────────────────
+  function loadConfig() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (_) {}
+    return {};
+  }
+
+  function saveConfig() {
+    const cfg = {
+      position_fio: document.getElementById("position_fio").value.trim(),
+      signature:    document.getElementById("signature").value.trim(),
+      fio_short:    document.getElementById("fio_short").value.trim(),
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+    showToast("✅ Настройки сохранены");
+  }
+
+  function applyConfig() {
+    const cfg = loadConfig();
+    if (cfg.position_fio) document.getElementById("position_fio").value = cfg.position_fio;
+    if (cfg.signature)    document.getElementById("signature").value    = cfg.signature;
+    if (cfg.fio_short)    document.getElementById("fio_short").value    = cfg.fio_short;
+  }
+
+  // ── Attachments ───────────────────────────────────────────────
+  let attCount = 0;
+
+  function addAttachment() {
+    attCount++;
+    const idx = attCount;
+    const container = document.getElementById("att-container");
+
+    const row = document.createElement("div");
+    row.className = "att-row";
+    row.dataset.idx = idx;
+
+    row.innerHTML = `
+      <span class="att-num">${idx}.</span>
+      <div class="att-field att-name">
+        <label>Название:</label>
+        <input type="text" class="att-name-input" value="Доказательства №${idx}" />
+      </div>
+      <div class="att-field att-url">
+        <label>URL:</label>
+        <input type="url" class="att-url-input" placeholder="https://..." />
+      </div>
+    `;
+
+    container.appendChild(row);
+  }
+
+  function removeLastAttachment() {
+    const container = document.getElementById("att-container");
+    const rows = container.querySelectorAll(".att-row");
+    if (rows.length === 0) return;
+    container.removeChild(rows[rows.length - 1]);
+  }
+
+  // ── Generate ──────────────────────────────────────────────────
+  function generate() {
+    const positionFio = document.getElementById("position_fio").value.trim() || "[Должность и ФИО не указаны]";
+    const signature   = document.getElementById("signature").value.trim()    || "________________";
+    const fioShort    = document.getElementById("fio_short").value.trim()    || "[ФИО]";
+    const subject     = document.getElementById("subject").value.trim()      || "[суть нарушения не указана]";
+    const basis       = document.getElementById("basis").value.trim()        || "[основание не указано]";
+    const request     = document.getElementById("request").value.trim()      || "[требования не указаны]";
+    const usbUrl      = document.getElementById("usb_url").value.trim();
+
+    const now   = new Date();
+    const day   = String(now.getDate());
+    const month = MONTHS_RU[now.getMonth() + 1];
+    const yearFull = String(now.getFullYear());
+
+    // Attachments
+    const attLines = [];
+    document.querySelectorAll("#att-container .att-row").forEach(row => {
+      const name = row.querySelector(".att-name-input").value.trim();
+      const url  = row.querySelector(".att-url-input").value.trim();
+      if (name && url)  attLines.push(`[URL=${url}]${name}[/URL]`);
+      else if (name)    attLines.push(`${name} — [ссылка не указана]`);
+    });
+
+    if (usbUrl) {
+      attLines.push(`[URL=${usbUrl}]Перенос доказательств на USB-Flash[/URL]`);
+    } else {
+      attLines.push("Перенос доказательств на USB-Flash — [ссылка не указана]");
+    }
+
+    const attachmentsBb = attLines.join("\n");
+
+    const bb =
+`[RIGHT][SIZE=15px][FONT=Times New Roman]Руководству ГАИ по Нижегородской области[/FONT][/SIZE]
+[FONT=Times New Roman][SIZE=15px]от ${positionFio}[/SIZE][/FONT]
+[/RIGHT]
+[HEADING=2][CENTER][FONT=Times New Roman][SIZE=15px][B]РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ[/B][/SIZE][/FONT][/CENTER][/HEADING]
+[CENTER][FONT=Times New Roman][SIZE=15px]о ${subject}[/SIZE][/FONT]
+[/CENTER]
+[FONT=Times New Roman][SIZE=15px][B]Основание рапорта: [/B]${basis}[/SIZE][/FONT]
+[RIGHT][/RIGHT]
+[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Прошу руководство ГАИ: [/B]${request}[/SIZE][/FONT][/SIZE][/FONT]
+[RIGHT][/RIGHT]
+[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Приложения:[/B]
+${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
+[RIGHT]
+[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px]Дата: «${day}[B]» ${month} [/B]${yearFull} г.[/SIZE][/FONT]
+[SIZE=15px][FONT=Times New Roman]Подпись: ${signature} / ${fioShort}[/FONT][/SIZE][/SIZE][/FONT]
+[/RIGHT]`;
+
+    document.getElementById("output").value = bb;
+  }
+
+  // ── Clipboard ─────────────────────────────────────────────────
+  async function copyToClipboard() {
+    const content = document.getElementById("output").value.trim();
+    if (!content) { showToast("⚠️ Сначала сгенерируйте BB-код"); return; }
+    try {
+      await navigator.clipboard.writeText(content);
+      showToast("✅ BB-код скопирован в буфер обмена");
+    } catch (_) {
+      document.getElementById("output").select();
+      document.execCommand("copy");
+      showToast("✅ Скопировано");
+    }
+  }
+
+  function clearOutput() {
+    document.getElementById("output").value = "";
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────
+  let toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  applyConfig();
+  addAttachment();
+</script>
+</body>
+</html>
