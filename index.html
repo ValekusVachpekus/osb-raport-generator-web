@@ -303,8 +303,8 @@
 
     .tpl-wrap { position: relative; }
     .btn-sm {
-      padding: 4px 10px !important;
-      font-size: 12px !important;
+      padding: 6px 14px !important;
+      font-size: 13px !important;
       border-radius: 7px !important;
     }
     .tpl-menu {
@@ -337,7 +337,7 @@
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,.65);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,.7);
       z-index: 500;
       display: flex; align-items: center; justify-content: center;
       padding: 16px;
@@ -506,7 +506,20 @@
     <div class="card-title"><span class="icon">📝</span> Поля рапорта</div>
 
     <div class="field-group">
-      <label class="field-label" for="subject">О чём <span style="color:#ef4444">*</span></label>
+      <div class="field-label-row">
+        <label class="field-label" for="subject">О чём <span style="color:#ef4444">*</span></label>
+        <div class="tpl-wrap">
+          <button class="btn btn-ghost btn-sm" onclick="toggleSubjMenu(event)">📋 Шаблоны ▾</button>
+          <div class="tpl-menu" id="subj-menu">
+            <div class="tpl-item" onclick="insertSubject('нарушении устава ОВД')">
+              <div class="tpl-item-title">Нарушение устава ОВД</div>
+            </div>
+            <div class="tpl-item" onclick="insertSubject('нарушении законодательства Нижегородской Области')">
+              <div class="tpl-item-title">Нарушение законодательства НО</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <input type="text" id="subject" placeholder="нарушении п. X устава ОВД..." />
       <div class="field-error" id="err-subject">Обязательное поле</div>
     </div>
@@ -599,7 +612,7 @@
     <div class="modal-body">
       <div class="modal-field">
         <label for="tpl-fio">ФИО сотрудника</label>
-        <input type="text" id="tpl-fio" placeholder="Иванов Иван Иванович" />
+        <input type="text" id="tpl-fio" placeholder="Иванова Ивана Ивановича" />
       </div>
       <div class="modal-field">
         <label id="tpl-options-label">Выберите вид</label>
@@ -952,6 +965,7 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
   // Close dropdown when clicking outside
   document.addEventListener("click", () => {
     document.getElementById("tpl-menu").classList.remove("open");
+    document.getElementById("subj-menu").classList.remove("open");
   });
 
   function openTplModal(idx) {
@@ -964,13 +978,11 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
 
     const optContainer = document.getElementById("tpl-options");
     optContainer.innerHTML = tpl.options.map((opt, i) => `
-      <label class="radio-opt" onclick="this.classList.add('selected'); this.closest('.radio-group').querySelectorAll('.radio-opt').forEach(el => { if(el!==this) el.classList.remove('selected'); })">
+      <label class="radio-opt${i === 0 ? " selected" : ""}">
         <input type="radio" name="tpl-opt" value="${escHtml(opt)}" ${i === 0 ? "checked" : ""} />
         ${escHtml(opt)}
       </label>
     `).join("");
-    // Mark first as selected visually
-    optContainer.querySelector(".radio-opt").classList.add("selected");
 
     document.getElementById("tpl-modal").classList.add("open");
     setTimeout(() => document.getElementById("tpl-fio").focus(), 100);
@@ -991,7 +1003,7 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     if (!fio) { document.getElementById("tpl-fio").focus(); showToast("⚠️ Введите ФИО сотрудника"); return; }
     if (!selected) { showToast("⚠️ Выберите вид"); return; }
 
-    const text = `${tpl.prefix} ${fio} ${tpl.middle} ${selected.value}`;
+    const text = `${tpl.prefix} ${fio} ${tpl.middle} ${selected.value}.`;
     const ta = document.getElementById("request");
     const cur = ta.value.trim();
     ta.value = cur ? cur + "\n" + text : text;
@@ -1004,6 +1016,28 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") closeTplModal();
   });
+
+  // Radio option highlight via delegation
+  document.getElementById("tpl-options").addEventListener("change", e => {
+    if (e.target.type !== "radio") return;
+    document.querySelectorAll("#tpl-options .radio-opt").forEach(el => el.classList.remove("selected"));
+    e.target.closest(".radio-opt").classList.add("selected");
+  });
+
+  /* ── Subject templates ────────────────────────────────── */
+  function toggleSubjMenu(e) {
+    e.stopPropagation();
+    document.getElementById("tpl-menu").classList.remove("open");
+    document.getElementById("subj-menu").classList.toggle("open");
+  }
+
+  function insertSubject(text) {
+    document.getElementById("subj-menu").classList.remove("open");
+    const el = document.getElementById("subject");
+    el.value = text;
+    el.dispatchEvent(new Event("input"));
+    showToast("✅ Шаблон вставлен");
+  }
 
   /* ── Init ─────────────────────────────────────────────── */
   applyConfig();
