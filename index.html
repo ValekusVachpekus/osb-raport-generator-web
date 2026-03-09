@@ -294,7 +294,107 @@
       padding: 40px 0;
     }
 
-    /* ── Actions bar ─────────────────────────────────────── */
+    /* ── Template dropdown ───────────────────────────────── */
+    .field-label-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 5px; gap: 8px; flex-wrap: wrap;
+    }
+    .field-label-row .field-label { margin-bottom: 0; }
+
+    .tpl-wrap { position: relative; }
+    .btn-sm {
+      padding: 4px 10px !important;
+      font-size: 12px !important;
+      border-radius: 7px !important;
+    }
+    .tpl-menu {
+      position: absolute; right: 0; top: calc(100% + 6px);
+      background: var(--bg2);
+      border: 1px solid var(--border-h);
+      border-radius: 10px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.5);
+      min-width: 260px;
+      z-index: 200;
+      overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity .18s, transform .18s;
+    }
+    .tpl-menu.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .tpl-item {
+      padding: 11px 16px;
+      font-size: 13px; cursor: pointer;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+    }
+    .tpl-item:last-child { border-bottom: none; }
+    .tpl-item:hover { background: var(--bg3); }
+    .tpl-item-title { font-weight: 600; font-size: 13px; }
+    .tpl-item-sub   { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+    /* ── Modal ───────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border-h);
+      border-radius: 16px;
+      width: 100%; max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      transform: translateY(16px) scale(.98);
+      transition: transform .22s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header-title { font-size: 14px; font-weight: 700; }
+    .modal-close {
+      width: 28px; height: 28px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 7px; cursor: pointer; color: var(--text-dim);
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .12s, color .12s;
+    }
+    .modal-close:hover { background: var(--border-h); color: var(--text); }
+
+    .modal-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+    .modal-field label { font-size: 12px; font-weight: 600; color: var(--text-dim); display: block; margin-bottom: 5px; }
+
+    .radio-group { display: flex; flex-direction: column; gap: 6px; }
+    .radio-opt {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 12px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer;
+      font-size: 13px; color: var(--text);
+      transition: border-color .14s, background .14s;
+    }
+    .radio-opt:hover { border-color: var(--border-h); }
+    .radio-opt input[type="radio"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+    .radio-opt.selected { border-color: var(--accent); background: rgba(91,124,250,.1); }
+
+    .modal-footer {
+      padding: 12px 20px 16px;
+      display: flex; gap: 8px; justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
     .actions {
       display: flex; gap: 10px; flex-wrap: wrap;
       margin-bottom: 14px;
@@ -418,7 +518,22 @@
     </div>
 
     <div class="field-group">
-      <label class="field-label" for="request">Прошу руководство ГАИ <span style="color:#ef4444">*</span></label>
+      <div class="field-label-row">
+        <label class="field-label" for="request">Прошу руководство ГАИ <span style="color:#ef4444">*</span></label>
+        <div class="tpl-wrap">
+          <button class="btn btn-ghost btn-sm" onclick="toggleTplMenu(event)">📋 Шаблоны ▾</button>
+          <div class="tpl-menu" id="tpl-menu">
+            <div class="tpl-item" onclick="openTplModal(0)">
+              <div class="tpl-item-title">Дисциплинарная ответственность</div>
+              <div class="tpl-item-sub">выговор, два выговора, увольнение…</div>
+            </div>
+            <div class="tpl-item" onclick="openTplModal(1)">
+              <div class="tpl-item-title">Мера дисциплинарного воздействия</div>
+              <div class="tpl-item-sub">беседа, переаттестация, отстранение…</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <textarea id="request" rows="3" placeholder="провести проверку и привлечь к ответственности..."></textarea>
       <div class="field-error" id="err-request">Обязательное поле</div>
     </div>
@@ -445,6 +560,7 @@
   <!-- ДЕЙСТВИЯ -->
   <div class="actions">
     <button class="btn btn-orange" onclick="generate()">⚡ Сгенерировать</button>
+    <button class="btn btn-blue"   onclick="generateAndPreview()">👁 Сгенерировать и перейти к предпросмотру</button>
     <button class="btn btn-purple" onclick="copyToClipboard()">📋 Скопировать в буфер</button>
     <button class="btn btn-ghost"  onclick="clearOutput()">🗑 Очистить вывод</button>
     <button class="btn btn-ghost"  onclick="clearForm()">✖ Очистить форму</button>
@@ -472,6 +588,33 @@
 </div>
 
 </div><!-- /container -->
+
+<!-- ═══════════════ TEMPLATE MODAL ═══════════════ -->
+<div class="modal-overlay" id="tpl-modal" onclick="closeTplModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-header-title" id="tpl-modal-title">Шаблон</span>
+      <button class="modal-close" onclick="closeTplModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label for="tpl-fio">ФИО сотрудника</label>
+        <input type="text" id="tpl-fio" placeholder="Иванов Иван Иванович" />
+      </div>
+      <div class="modal-field">
+        <label id="tpl-options-label">Выберите вид</label>
+        <div class="radio-group" id="tpl-options"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeTplModal()">Отмена</button>
+      <button class="btn btn-accent" id="tpl-insert-btn" onclick="insertTemplate()"
+        style="background:linear-gradient(135deg,#1d4ed8,#5b7cfa);color:#fff;box-shadow:0 4px 14px rgba(91,124,250,.3);">
+        ✅ Вставить в поле
+      </button>
+    </div>
+  </div>
+</div>
 <div id="toast"></div>
 
 <script>
@@ -713,6 +856,18 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     showToast("✅ BB-код сгенерирован");
   }
 
+  /* ── Generate + preview ───────────────────────────────── */
+  function generateAndPreview() {
+    generate();
+    // Switch to preview tab only if generation succeeded (output not empty)
+    if (document.getElementById("output").value.trim()) {
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById("tab-preview").classList.add("active");
+      document.querySelectorAll(".tab-btn")[1].classList.add("active");
+    }
+  }
+
   /* ── Clear form ───────────────────────────────────────── */
   function clearForm() {
     if (!confirm("Очистить все поля формы и черновик?")) return;
@@ -759,6 +914,96 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
   function v(id)        { return document.getElementById(id).value.trim(); }
   function set(id, val) { document.getElementById(id).value = val; }
   function escHtml(s)   { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  /* ── Templates ────────────────────────────────────────── */
+  const TEMPLATES = [
+    {
+      title: "Дисциплинарная ответственность",
+      prefix: "привлечь",
+      middle: "к дисциплинарной ответственности в виде",
+      options: [
+        "выговора без занесения в личное дело",
+        "выговора с занесением в личное дело",
+        "двух выговоров с занесением в личное дело",
+        "увольнения с места несения службы",
+        "увольнения с места несения службы с занесением в черный список организации",
+      ]
+    },
+    {
+      title: "Мера дисциплинарного воздействия",
+      prefix: "привлечь",
+      middle: "к мере дисциплинарного воздействия в виде",
+      options: [
+        "беседы с руководством",
+        "переаттестации",
+        "отстранения",
+      ]
+    }
+  ];
+
+  let currentTpl = 0;
+
+  function toggleTplMenu(e) {
+    e.stopPropagation();
+    const menu = document.getElementById("tpl-menu");
+    menu.classList.toggle("open");
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", () => {
+    document.getElementById("tpl-menu").classList.remove("open");
+  });
+
+  function openTplModal(idx) {
+    document.getElementById("tpl-menu").classList.remove("open");
+    currentTpl = idx;
+    const tpl = TEMPLATES[idx];
+    document.getElementById("tpl-modal-title").textContent = tpl.title;
+    document.getElementById("tpl-fio").value = "";
+    document.getElementById("tpl-options-label").textContent = "Выберите вид";
+
+    const optContainer = document.getElementById("tpl-options");
+    optContainer.innerHTML = tpl.options.map((opt, i) => `
+      <label class="radio-opt" onclick="this.classList.add('selected'); this.closest('.radio-group').querySelectorAll('.radio-opt').forEach(el => { if(el!==this) el.classList.remove('selected'); })">
+        <input type="radio" name="tpl-opt" value="${escHtml(opt)}" ${i === 0 ? "checked" : ""} />
+        ${escHtml(opt)}
+      </label>
+    `).join("");
+    // Mark first as selected visually
+    optContainer.querySelector(".radio-opt").classList.add("selected");
+
+    document.getElementById("tpl-modal").classList.add("open");
+    setTimeout(() => document.getElementById("tpl-fio").focus(), 100);
+  }
+
+  function closeTplModal() {
+    document.getElementById("tpl-modal").classList.remove("open");
+  }
+
+  function closeTplModalOnOverlay(e) {
+    if (e.target === document.getElementById("tpl-modal")) closeTplModal();
+  }
+
+  function insertTemplate() {
+    const tpl = TEMPLATES[currentTpl];
+    const fio = document.getElementById("tpl-fio").value.trim();
+    const selected = document.querySelector('input[name="tpl-opt"]:checked');
+    if (!fio) { document.getElementById("tpl-fio").focus(); showToast("⚠️ Введите ФИО сотрудника"); return; }
+    if (!selected) { showToast("⚠️ Выберите вид"); return; }
+
+    const text = `${tpl.prefix} ${fio} ${tpl.middle} ${selected.value}`;
+    const ta = document.getElementById("request");
+    const cur = ta.value.trim();
+    ta.value = cur ? cur + "\n" + text : text;
+    ta.dispatchEvent(new Event("input")); // trigger validation clear + autosave
+    closeTplModal();
+    showToast("✅ Шаблон вставлен");
+  }
+
+  // Close modal on Escape
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeTplModal();
+  });
 
   /* ── Init ─────────────────────────────────────────────── */
   applyConfig();
