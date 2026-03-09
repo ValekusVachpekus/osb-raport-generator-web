@@ -16,15 +16,8 @@
       --text:      #e2e6f0;
       --text-dim:  #8b92a8;
       --accent:    #5b7cfa;
-      --accent-h:  #7b96ff;
-
-      --green:  #2ecc71;
-      --blue:   #3b82f6;
-      --red:    #ef4444;
-      --orange: #f97316;
-      --purple: #a855f7;
-      --teal:   #14b8a6;
-      --gray:   #6b7280;
+      --radius:    14px;
+      --red-err:   #ef4444;
     }
 
     html { font-size: 14px; }
@@ -34,297 +27,334 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 24px 16px 48px;
+      padding: 24px 16px 60px;
     }
 
-    /* ── Header ─────────────────────────────────────────────── */
+    /* ── Layout ─────────────────────────────────────────── */
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* ── Header ─────────────────────────────────────────── */
     header {
       display: flex;
       align-items: center;
       gap: 12px;
       margin-bottom: 28px;
     }
-
     .logo {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, var(--accent), var(--purple));
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg,#5b7cfa,#a855f7);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 22px;
       box-shadow: 0 4px 18px rgba(91,124,250,.35);
       flex-shrink: 0;
     }
+    header h1 { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+    header p  { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
 
-    header h1 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -.3px;
+    /* ── Tabs ────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
     }
-
-    header p {
-      font-size: 12px;
+    .tab-btn {
+      flex: 1;
+      padding: 7px 12px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
       color: var(--text-dim);
-      margin-top: 1px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s, color .18s;
     }
+    .tab-btn.active {
+      background: var(--bg3);
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    }
+    .tab-btn:hover:not(.active) { color: var(--text); }
 
-    /* ── Cards ──────────────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Cards ───────────────────────────────────────────── */
     .card {
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius);
       padding: 18px 20px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       transition: border-color .2s;
     }
-
     .card:hover { border-color: var(--border-h); }
 
     .card-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700;
       color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: .7px;
+      text-transform: uppercase; letter-spacing: .7px;
       margin-bottom: 14px;
     }
-
-    .card-title span {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 26px;
-      height: 26px;
+    .card-title .icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px;
       background: var(--bg3);
-      border-radius: 7px;
-      font-size: 14px;
+      border-radius: 7px; font-size: 14px;
     }
 
-    /* ── Form elements ──────────────────────────────────────── */
-    label {
+    /* ── Form ────────────────────────────────────────────── */
+    .field-group { margin-top: 12px; }
+    .field-group:first-child { margin-top: 0; }
+
+    label.field-label {
       display: block;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 12px; font-weight: 600;
       color: var(--text-dim);
-      margin-bottom: 5px;
-      margin-top: 12px;
-      letter-spacing: .3px;
+      margin-bottom: 5px; letter-spacing: .3px;
     }
 
-    label:first-of-type { margin-top: 0; }
-
-    input[type="text"],
-    input[type="url"],
-    textarea {
+    input[type="text"], input[type="url"], textarea {
       width: 100%;
       padding: 8px 12px;
       background: var(--bg3);
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-family: inherit;
-      font-size: 13px;
+      font-family: inherit; font-size: 13px;
       color: var(--text);
       outline: none;
       transition: border-color .18s, box-shadow .18s;
     }
-
     input[type="text"]:focus,
     input[type="url"]:focus,
     textarea:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(91,124,250,.18);
     }
+    input.invalid, textarea.invalid {
+      border-color: var(--red-err) !important;
+      box-shadow: 0 0 0 3px rgba(239,68,68,.18) !important;
+    }
+    .field-error {
+      font-size: 11px; color: var(--red-err);
+      margin-top: 4px; display: none;
+    }
+    .field-error.visible { display: block; }
 
     input::placeholder, textarea::placeholder { color: #4a5068; }
-
     textarea { resize: vertical; }
 
+    /* ── Row layout ──────────────────────────────────────── */
     .row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: flex-end;
+      display: flex; gap: 10px;
+      flex-wrap: wrap; align-items: flex-end;
     }
+    .row > .field   { flex: 1; min-width: 140px; }
+    .row > .field-sm { flex: 0 0 auto; min-width: 110px; max-width: 180px; }
 
-    .row > .field { flex: 1; min-width: 140px; }
-    .row > .field-sm { flex: 0 0 auto; min-width: 120px; }
-
-    /* ── Buttons ────────────────────────────────────────────── */
+    /* ── Buttons ─────────────────────────────────────────── */
     .btn {
       position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 9px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      letter-spacing: .2px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 15px;
+      border: none; border-radius: 9px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
       overflow: hidden;
-      transition: transform .15s, box-shadow .15s, filter .15s;
+      transition: transform .15s, filter .15s;
     }
-
-    /* ripple */
     .btn::after {
       content: '';
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: rgba(255,255,255,.12);
-      opacity: 0;
-      border-radius: inherit;
-      transition: opacity .25s;
+      opacity: 0; transition: opacity .2s;
     }
-
-    .btn:hover::after  { opacity: 1; }
-    .btn:active { transform: scale(.96); }
+    .btn:hover::after { opacity: 1; }
     .btn:hover  { transform: translateY(-1px); }
-
-    .btn-icon {
-      font-size: 15px;
-      line-height: 1;
-    }
+    .btn:active { transform: scale(.96); }
 
     .btn-green  { background: linear-gradient(135deg,#1a9e55,#2ecc71); color:#fff; box-shadow:0 4px 14px rgba(46,204,113,.25); }
     .btn-blue   { background: linear-gradient(135deg,#1d4ed8,#3b82f6); color:#fff; box-shadow:0 4px 14px rgba(59,130,246,.25); }
     .btn-red    { background: linear-gradient(135deg,#b91c1c,#ef4444); color:#fff; box-shadow:0 4px 14px rgba(239,68,68,.25); }
     .btn-orange { background: linear-gradient(135deg,#c2510f,#f97316); color:#fff; box-shadow:0 4px 14px rgba(249,115,22,.3); }
     .btn-purple { background: linear-gradient(135deg,#7e22ce,#a855f7); color:#fff; box-shadow:0 4px 14px rgba(168,85,247,.25); }
-    .btn-teal   { background: linear-gradient(135deg,#0d7268,#14b8a6); color:#fff; box-shadow:0 4px 14px rgba(20,184,166,.25); }
     .btn-gray   { background: linear-gradient(135deg,#374151,#6b7280); color:#fff; box-shadow:0 4px 14px rgba(107,114,128,.2); }
+    .btn-ghost  { background: var(--bg3); color: var(--text-dim); border: 1px solid var(--border); box-shadow: none; }
+    .btn-ghost:hover { color: var(--text); }
 
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Settings unsaved indicator ──────────────────────── */
+    .unsaved-dot {
+      width: 7px; height: 7px;
+      background: #f97316;
+      border-radius: 50%;
+      display: none;
+      flex-shrink: 0;
     }
+    .unsaved-dot.visible { display: inline-block; }
+    .unsaved-hint {
+      font-size: 11px; color: #f97316;
+      display: none; margin-left: 4px;
+    }
+    .unsaved-hint.visible { display: inline; }
 
-    /* ── Attachments ────────────────────────────────────────── */
+    /* ── Attachments ─────────────────────────────────────── */
     .att-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      margin-bottom: 8px;
+      display: flex; align-items: flex-end; gap: 8px;
       flex-wrap: wrap;
       padding: 10px 12px;
       background: var(--bg3);
       border: 1px solid var(--border);
       border-radius: 10px;
+      margin-bottom: 8px;
       transition: border-color .18s;
-      animation: slideIn .22s ease;
+      animation: slideIn .2s ease;
     }
-
     .att-row:hover { border-color: var(--border-h); }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-8px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(-8px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
     .att-num {
-      font-size: 12px;
+      font-size: 12px; font-weight: 700;
       color: var(--text-dim);
-      min-width: 20px;
-      text-align: right;
-      padding-bottom: 7px;
-      font-weight: 700;
+      min-width: 18px; text-align: right;
+      padding-bottom: 8px;
     }
-
-    .att-name { flex: 0 0 210px; min-width: 120px; }
+    .att-name { flex: 0 0 200px; min-width: 120px; }
     .att-url  { flex: 1; min-width: 150px; }
+    .att-field { display: flex; flex-direction: column; gap: 3px; }
+    .att-field label { font-size: 11px; color: var(--text-dim); font-weight: 600; }
 
-    .att-row label {
-      margin: 0 0 4px;
-      font-size: 11px;
-    }
-
-    .att-field { display: flex; flex-direction: column; gap: 0; }
-
-    /* ── Divider ────────────────────────────────────────────── */
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
+    .section-sub {
+      font-size: 11px; font-weight: 700;
       color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: .6px;
+      text-transform: uppercase; letter-spacing: .6px;
       margin: 14px 0 8px;
     }
 
-    /* ── Output ─────────────────────────────────────────────── */
+    /* ── Output area ─────────────────────────────────────── */
+    .output-wrap { position: relative; }
     #output {
-      width: 100%;
-      height: 200px;
-      font-family: "Cascadia Code", "Fira Code", "Courier New", monospace;
-      font-size: 12px;
-      background: #0a0d14;
-      color: #a8b5d8;
+      width: 100%; height: 200px;
+      font-family: "Cascadia Code","Fira Code","Courier New",monospace;
+      font-size: 12px; line-height: 1.6;
+      background: #0a0d14; color: #a8b5d8;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 10px 12px;
-      resize: vertical;
-      white-space: pre;
-      overflow: auto;
-      line-height: 1.6;
+      padding: 10px 44px 10px 12px;
+      resize: vertical; white-space: pre; overflow: auto;
       transition: border-color .18s;
     }
-
     #output:focus { border-color: var(--accent); outline: none; }
 
-    /* ── Actions row ────────────────────────────────────────── */
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      padding: 16px 20px;
-      background: var(--bg2);
+    .copy-inline-btn {
+      position: absolute; top: 8px; right: 8px;
+      width: 28px; height: 28px;
+      background: var(--bg3);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--text-dim);
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .copy-inline-btn:hover { background: var(--border-h); color: var(--text); border-color: var(--border-h); }
+
+    /* ── Preview ─────────────────────────────────────────── */
+    #preview-box {
+      background: #fff;
+      color: #111;
+      border-radius: 8px;
+      padding: 28px 32px;
+      font-family: "Times New Roman", serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 200px;
+    }
+    #preview-box .pre-right  { text-align: right; }
+    #preview-box .pre-center { text-align: center; }
+    #preview-box .pre-heading { text-align: center; font-weight: 700; font-size: 17px; margin: 12px 0 4px; }
+    #preview-box .pre-block  { margin: 10px 0; }
+    #preview-box b { font-weight: 700; }
+    #preview-empty {
+      color: var(--text-dim); font-family: inherit;
+      font-size: 13px; text-align: center;
+      padding: 40px 0;
     }
 
-    /* ── Toast ──────────────────────────────────────────────── */
+    /* ── Actions bar ─────────────────────────────────────── */
+    .actions {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 14px;
+      padding: 14px 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    /* ── Toast ───────────────────────────────────────────── */
     #toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
+      position: fixed; bottom: 28px; left: 50%;
       transform: translateX(-50%) translateY(20px);
       background: var(--bg3);
       border: 1px solid var(--border-h);
       color: var(--text);
       padding: 10px 22px;
       border-radius: 30px;
-      font-size: 13px;
-      font-weight: 500;
-      opacity: 0;
-      pointer-events: none;
+      font-size: 13px; font-weight: 500;
+      opacity: 0; pointer-events: none;
       transition: opacity .22s, transform .22s;
       z-index: 999;
       box-shadow: 0 8px 30px rgba(0,0,0,.5);
       backdrop-filter: blur(8px);
+      white-space: nowrap;
     }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* ── Scrollbar ──────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    /* ── Scrollbar ───────────────────────────────────────── */
+    ::-webkit-scrollbar { width:6px; height:6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border-h); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #5b6280; }
+    ::-webkit-scrollbar-thumb { background: var(--border-h); border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:#5b6280; }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      body { padding: 14px 10px 60px; }
+      .card { padding: 14px 14px; }
+      .actions { padding: 12px 14px; }
+      header h1 { font-size: 16px; }
+
+      .row { flex-direction: column; }
+      .row > .field, .row > .field-sm { max-width: 100%; min-width: 0; width: 100%; }
+
+      .att-row { flex-direction: column; gap: 6px; }
+      .att-name, .att-url { flex: 0 0 auto; width: 100%; }
+      .att-num { padding-bottom: 0; }
+
+      .btn { font-size: 12px; padding: 7px 12px; }
+      .btn-row { gap: 6px; }
+
+      .tabs { gap: 2px; }
+      .tab-btn { font-size: 12px; padding: 6px 8px; }
+
+      #preview-box { padding: 16px 14px; font-size: 14px; }
+    }
   </style>
 </head>
 <body>
+<div class="container">
 
 <header>
   <div class="logo">📋</div>
@@ -334,137 +364,245 @@
   </div>
 </header>
 
-<!-- НАСТРОЙКИ -->
-<div class="card">
-  <div class="card-title"><span>⚙️</span> Настройки</div>
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('editor')">✏️ Редактор</button>
+  <button class="tab-btn" onclick="switchTab('preview')">👁 Предпросмотр</button>
+  <button class="tab-btn" onclick="switchTab('bbcode')">📄 BB-код</button>
+</div>
 
-  <label for="position_fio">Должность и ФИО полностью</label>
-  <input type="text" id="position_fio" placeholder="оперуполномоченный ОСБ Иванов Иван Иванович" />
+<!-- ═══════════════ TAB: EDITOR ═══════════════ -->
+<div id="tab-editor" class="tab-panel active">
 
-  <div class="row" style="margin-top:4px;">
-    <div class="field-sm">
-      <label for="signature">Подпись</label>
-      <input type="text" id="signature" placeholder="Иванов" />
+  <!-- НАСТРОЙКИ -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon">⚙️</span> Настройки
+      <span class="unsaved-dot" id="unsaved-dot"></span>
+      <span class="unsaved-hint" id="unsaved-hint">— несохранённые изменения</span>
     </div>
-    <div class="field">
-      <label for="fio_short">ФИО для подписи</label>
-      <input type="text" id="fio_short" placeholder="Иванов И. И." />
+
+    <div class="field-group">
+      <label class="field-label" for="position_fio">Должность и ФИО полностью</label>
+      <input type="text" id="position_fio" placeholder="оперуполномоченный ОСБ Иванов Иван Иванович" />
     </div>
-    <div style="padding-bottom:1px;">
-      <button class="btn btn-green" onclick="saveConfig()">
-        <span class="btn-icon">💾</span> Сохранить
-      </button>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="field-sm field-group">
+        <label class="field-label" for="signature">Подпись</label>
+        <input type="text" id="signature" placeholder="Иванов" />
+      </div>
+      <div class="field field-group">
+        <label class="field-label" for="fio_short">ФИО для подписи</label>
+        <input type="text" id="fio_short" placeholder="Иванов И. И." />
+      </div>
+      <div style="padding-bottom:1px; flex-shrink:0;">
+        <button class="btn btn-green" onclick="saveConfig()">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПОЛЯ РАПОРТА -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📝</span> Поля рапорта</div>
+
+    <div class="field-group">
+      <label class="field-label" for="subject">О чём <span style="color:#ef4444">*</span></label>
+      <input type="text" id="subject" placeholder="нарушении п. X устава ОВД..." />
+      <div class="field-error" id="err-subject">Обязательное поле</div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="basis">Основание рапорта <span style="color:#ef4444">*</span></label>
+      <textarea id="basis" rows="6" placeholder="Дата, описание события, ссылки на статьи законов..."></textarea>
+      <div class="field-error" id="err-basis">Обязательное поле</div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="request">Прошу руководство ГАИ <span style="color:#ef4444">*</span></label>
+      <textarea id="request" rows="3" placeholder="провести проверку и привлечь к ответственности..."></textarea>
+      <div class="field-error" id="err-request">Обязательное поле</div>
+    </div>
+  </div>
+
+  <!-- ПРИЛОЖЕНИЯ -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📎</span> Приложения</div>
+
+    <div class="field-group">
+      <label class="field-label" for="usb_url">Перенос доказательств на USB-Flash — URL</label>
+      <input type="url" id="usb_url" placeholder="https://..." />
+    </div>
+
+    <div class="section-sub">Фото / видео фиксации</div>
+    <div id="att-container"></div>
+
+    <div class="btn-row" style="margin-top:10px;">
+      <button class="btn btn-blue" onclick="addAttachment()">＋ Добавить</button>
+      <button class="btn btn-red"  onclick="removeLastAttachment()">－ Удалить последнее</button>
+    </div>
+  </div>
+
+  <!-- ДЕЙСТВИЯ -->
+  <div class="actions">
+    <button class="btn btn-orange" onclick="generate()">⚡ Сгенерировать</button>
+    <button class="btn btn-ghost"  onclick="clearForm()">🗑 Очистить форму</button>
+  </div>
+
+</div><!-- /tab-editor -->
+
+<!-- ═══════════════ TAB: PREVIEW ═══════════════ -->
+<div id="tab-preview" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">👁</span> Предпросмотр рапорта</div>
+    <div id="preview-box">
+      <div id="preview-empty">Сначала заполните форму и нажмите «⚡ Сгенерировать»</div>
     </div>
   </div>
 </div>
 
-<!-- ПОЛЯ РАПОРТА -->
-<div class="card">
-  <div class="card-title"><span>📝</span> Поля рапорта</div>
-
-  <label for="subject">О чём (нарушении устава ОВД, нарушении законодательства)</label>
-  <input type="text" id="subject" placeholder="о нарушении устава ОВД/о нарушении законодательства..." />
-
-  <label for="basis">Основание рапорта (подробно: дата, суть, ссылки на законы)</label>
-  <textarea id="basis" rows="6" placeholder="Дата, описание события, ссылки на статьи законов..."></textarea>
-
-  <label for="request">Прошу руководство ГАИ</label>
-  <textarea id="request" rows="3" placeholder="провести проверку и привлечь к ответственности..."></textarea>
-</div>
-
-<!-- ПРИЛОЖЕНИЯ -->
-<div class="card">
-  <div class="card-title"><span>📎</span> Приложения</div>
-
-  <label for="usb_url">Перенос доказательств на USB-Flash — URL</label>
-  <input type="url" id="usb_url" placeholder="https://..." />
-
-  <div class="section-label">Фото / видео фиксации</div>
-  <div id="att-container"></div>
-
-  <div class="btn-row" style="margin-top:10px;">
-    <button class="btn btn-blue" onclick="addAttachment()">
-      <span class="btn-icon">＋</span> Добавить
-    </button>
-    <button class="btn btn-red" onclick="removeLastAttachment()">
-      <span class="btn-icon">－</span> Удалить последнее
-    </button>
+<!-- ═══════════════ TAB: BBCODE ═══════════════ -->
+<div id="tab-bbcode" class="tab-panel">
+  <div class="actions">
+    <button class="btn btn-purple" onclick="copyToClipboard()">📋 Скопировать в буфер</button>
+    <button class="btn btn-gray"   onclick="clearOutput()">🗑 Очистить вывод</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📄</span> Готовый BB-код</div>
+    <div class="output-wrap">
+      <textarea id="output" readonly placeholder="Нажмите «⚡ Сгенерировать» на вкладке редактора..."></textarea>
+      <button class="copy-inline-btn" onclick="copyToClipboard()" title="Скопировать">📋</button>
+    </div>
   </div>
 </div>
 
-<!-- ДЕЙСТВИЯ -->
-<div class="actions">
-  <button class="btn btn-orange" onclick="generate()">
-    <span class="btn-icon">⚡</span> Сгенерировать BB-код
-  </button>
-  <button class="btn btn-purple" onclick="copyToClipboard()">
-    <span class="btn-icon">📋</span> Скопировать в буфер
-  </button>
-  <button class="btn btn-gray" onclick="clearOutput()">
-    <span class="btn-icon">🗑</span> Очистить вывод
-  </button>
-</div>
-
-<!-- ВЫВОД -->
-<div class="card">
-  <div class="card-title"><span>📄</span> Готовый BB-код</div>
-  <textarea id="output" readonly placeholder="Нажмите «Сгенерировать BB-код»..."></textarea>
-</div>
-
+</div><!-- /container -->
 <div id="toast"></div>
 
 <script>
-  const STORAGE_KEY = "osb_raport_config";
+  /* ── Keys ─────────────────────────────────────────────── */
+  const KEY_CFG   = "osb_config";
+  const KEY_DRAFT = "osb_draft";
 
-  const MONTHS_RU = [
-    "","января","февраля","марта","апреля","мая","июня",
-    "июля","августа","сентября","октября","ноября","декабря"
-  ];
+  const MONTHS = ["","января","февраля","марта","апреля","мая","июня",
+                  "июля","августа","сентября","октября","ноября","декабря"];
 
+  /* ── Tabs ─────────────────────────────────────────────── */
+  function switchTab(name) {
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("tab-" + name).classList.add("active");
+    event.currentTarget.classList.add("active");
+  }
+
+  /* ── Config ───────────────────────────────────────────── */
   function loadConfig() {
-    try { const r = localStorage.getItem(STORAGE_KEY); if (r) return JSON.parse(r); }
-    catch (_) {}
+    try { const r = localStorage.getItem(KEY_CFG); if (r) return JSON.parse(r); } catch(_){}
     return {};
   }
 
   function saveConfig() {
     const cfg = {
-      position_fio: document.getElementById("position_fio").value.trim(),
-      signature:    document.getElementById("signature").value.trim(),
-      fio_short:    document.getElementById("fio_short").value.trim(),
+      position_fio: v("position_fio"),
+      signature:    v("signature"),
+      fio_short:    v("fio_short"),
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+    localStorage.setItem(KEY_CFG, JSON.stringify(cfg));
+    setUnsaved(false);
     showToast("✅ Настройки сохранены");
   }
 
   function applyConfig() {
     const cfg = loadConfig();
-    if (cfg.position_fio) document.getElementById("position_fio").value = cfg.position_fio;
-    if (cfg.signature)    document.getElementById("signature").value    = cfg.signature;
-    if (cfg.fio_short)    document.getElementById("fio_short").value    = cfg.fio_short;
+    if (cfg.position_fio) set("position_fio", cfg.position_fio);
+    if (cfg.signature)    set("signature",    cfg.signature);
+    if (cfg.fio_short)    set("fio_short",    cfg.fio_short);
   }
 
+  /* ── Unsaved indicator ────────────────────────────────── */
+  const CFG_FIELDS = ["position_fio","signature","fio_short"];
+  let savedSnapshot = "";
+
+  function cfgSnapshot() {
+    return CFG_FIELDS.map(id => v(id)).join("|");
+  }
+
+  function setUnsaved(state) {
+    document.getElementById("unsaved-dot").classList.toggle("visible", state);
+    document.getElementById("unsaved-hint").classList.toggle("visible", state);
+  }
+
+  function checkUnsaved() {
+    setUnsaved(cfgSnapshot() !== savedSnapshot);
+  }
+
+  /* ── Draft autosave ───────────────────────────────────── */
+  const DRAFT_FIELDS = ["subject","basis","request","usb_url"];
+  let draftTimer = null;
+
+  function saveDraft() {
+    const att = [];
+    document.querySelectorAll("#att-container .att-row").forEach(row => {
+      att.push({
+        name: row.querySelector(".att-name-input").value,
+        url:  row.querySelector(".att-url-input").value,
+      });
+    });
+    const draft = {};
+    DRAFT_FIELDS.forEach(id => { draft[id] = document.getElementById(id).value; });
+    draft.attachments = att;
+    localStorage.setItem(KEY_DRAFT, JSON.stringify(draft));
+  }
+
+  function scheduleDraftSave() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveDraft, 700);
+  }
+
+  function loadDraft() {
+    try {
+      const raw = localStorage.getItem(KEY_DRAFT);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      DRAFT_FIELDS.forEach(id => { if (d[id] != null) document.getElementById(id).value = d[id]; });
+      if (Array.isArray(d.attachments) && d.attachments.length) {
+        // Remove the default attachment row added on init
+        document.getElementById("att-container").innerHTML = "";
+        attCount = 0;
+        d.attachments.forEach(a => addAttachment(a.name, a.url));
+      }
+    } catch(_) {}
+  }
+
+  /* ── Attachments ──────────────────────────────────────── */
   let attCount = 0;
 
-  function addAttachment() {
+  function renumberAttachments() {
+    document.querySelectorAll("#att-container .att-row").forEach((row, i) => {
+      row.querySelector(".att-num").textContent = (i + 1) + ".";
+    });
+  }
+
+  function addAttachment(name, url) {
     attCount++;
-    const idx = attCount;
     const container = document.getElementById("att-container");
     const row = document.createElement("div");
     row.className = "att-row";
-    row.dataset.idx = idx;
+    const displayIdx = container.querySelectorAll(".att-row").length + 1;
     row.innerHTML = `
-      <span class="att-num">${idx}.</span>
+      <span class="att-num">${displayIdx}.</span>
       <div class="att-field att-name">
         <label>Название</label>
-        <input type="text" class="att-name-input" value="Доказательства №${idx}" />
+        <input type="text" class="att-name-input" value="${escHtml(name || "Доказательства №" + displayIdx)}" />
       </div>
       <div class="att-field att-url">
         <label>URL</label>
-        <input type="url" class="att-url-input" placeholder="https://..." />
+        <input type="url" class="att-url-input" value="${escHtml(url || "")}" placeholder="https://..." />
       </div>
     `;
+    row.querySelectorAll("input").forEach(el => el.addEventListener("input", scheduleDraftSave));
     container.appendChild(row);
+    scheduleDraftSave();
   }
 
   function removeLastAttachment() {
@@ -472,25 +610,54 @@
     const rows = container.querySelectorAll(".att-row");
     if (!rows.length) return;
     const last = rows[rows.length - 1];
-    last.style.animation = "none";
     last.style.transition = "opacity .18s, transform .18s";
     last.style.opacity = "0";
     last.style.transform = "translateY(-6px)";
-    setTimeout(() => last.remove(), 180);
+    setTimeout(() => { last.remove(); renumberAttachments(); scheduleDraftSave(); }, 180);
   }
 
+  /* ── Validation ───────────────────────────────────────── */
+  const REQUIRED = ["subject","basis","request"];
+
+  function validateField(id) {
+    const el = document.getElementById(id);
+    const err = document.getElementById("err-" + id);
+    const empty = !el.value.trim();
+    el.classList.toggle("invalid", empty);
+    if (err) err.classList.toggle("visible", empty);
+    return !empty;
+  }
+
+  function validateAll() {
+    return REQUIRED.map(validateField).every(Boolean);
+  }
+
+  REQUIRED.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", () => {
+      if (el.classList.contains("invalid")) validateField(id);
+      scheduleDraftSave();
+    });
+  });
+
+  /* ── Generate ─────────────────────────────────────────── */
   function generate() {
-    const positionFio = document.getElementById("position_fio").value.trim() || "[Должность и ФИО не указаны]";
-    const signature   = document.getElementById("signature").value.trim()    || "________________";
-    const fioShort    = document.getElementById("fio_short").value.trim()    || "[ФИО]";
-    const subject     = document.getElementById("subject").value.trim()      || "о нарушении устава ОВД";
-    const basis       = document.getElementById("basis").value.trim()        || "[основание не указано]";
-    const request     = document.getElementById("request").value.trim()      || "[требования не указаны]";
-    const usbUrl      = document.getElementById("usb_url").value.trim();
+    if (!validateAll()) {
+      showToast("⚠️ Заполните обязательные поля");
+      return;
+    }
+
+    const positionFio = v("position_fio") || "[Должность и ФИО не указаны]";
+    const signature   = v("signature")    || "________________";
+    const fioShort    = v("fio_short")    || "[ФИО]";
+    const subject     = v("subject");
+    const basis       = document.getElementById("basis").value.trim();
+    const request     = document.getElementById("request").value.trim();
+    const usbUrl      = v("usb_url");
 
     const now = new Date();
     const day = String(now.getDate());
-    const month = MONTHS_RU[now.getMonth() + 1];
+    const month = MONTHS[now.getMonth() + 1];
     const yearFull = String(now.getFullYear());
 
     const attLines = [];
@@ -500,7 +667,6 @@
       if (name && url)  attLines.push(`[URL=${url}]${name}[/URL]`);
       else if (name)    attLines.push(`${name} — [ссылка не указана]`);
     });
-
     if (usbUrl) attLines.push(`[URL=${usbUrl}]Перенос доказательств на USB-Flash[/URL]`);
     else        attLines.push("Перенос доказательств на USB-Flash — [ссылка не указана]");
 
@@ -525,19 +691,58 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
 [/RIGHT]`;
 
     document.getElementById("output").value = bb;
-    showToast("✅ BB-код сгенерирован");
+
+    // ── Render preview ────────────────────────────────────
+    const attHtml = attLines.map((l, i) => {
+      const urlMatch = l.match(/\[URL=([^\]]+)\](.+?)\[\/URL\]/);
+      if (urlMatch) return `<div>${i+1}. <a href="${escHtml(urlMatch[1])}" target="_blank" style="color:#1d4ed8">${escHtml(urlMatch[2])}</a></div>`;
+      return `<div>${i+1}. ${escHtml(l)}</div>`;
+    }).join("");
+
+    document.getElementById("preview-box").innerHTML = `
+      <div class="pre-right">
+        Руководству ГАИ по Нижегородской области<br>
+        от ${escHtml(positionFio)}
+      </div>
+      <div class="pre-heading">РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ</div>
+      <div class="pre-center">о ${escHtml(subject)}</div>
+      <div class="pre-block"><b>Основание рапорта:</b> ${escHtml(basis).replace(/\n/g,"<br>")}</div>
+      <div class="pre-block"><b>Прошу руководство ГАИ:</b> ${escHtml(request).replace(/\n/g,"<br>")}</div>
+      <div class="pre-block"><b>Приложения:</b><br>${attHtml}</div>
+      <div class="pre-right" style="margin-top:16px;">
+        Дата: «${escHtml(day)}» ${escHtml(month)} ${escHtml(yearFull)} г.<br>
+        Подпись: ${escHtml(signature)} / ${escHtml(fioShort)}
+      </div>
+    `;
+
+    showToast("✅ Готово — переключитесь на вкладку");
   }
 
+  /* ── Clear form ───────────────────────────────────────── */
+  function clearForm() {
+    if (!confirm("Очистить все поля формы и черновик?")) return;
+    [...DRAFT_FIELDS, ...REQUIRED].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ""; el.classList.remove("invalid"); }
+    });
+    document.querySelectorAll(".field-error").forEach(e => e.classList.remove("visible"));
+    document.getElementById("att-container").innerHTML = "";
+    attCount = 0;
+    addAttachment();
+    document.getElementById("output").value = "";
+    document.getElementById("preview-box").innerHTML =
+      '<div id="preview-empty">Сначала заполните форму и нажмите «⚡ Сгенерировать»</div>';
+    localStorage.removeItem(KEY_DRAFT);
+    showToast("🗑 Форма очищена");
+  }
+
+  /* ── Clipboard ────────────────────────────────────────── */
   async function copyToClipboard() {
     const content = document.getElementById("output").value.trim();
     if (!content) { showToast("⚠️ Сначала сгенерируйте BB-код"); return; }
-    try {
-      await navigator.clipboard.writeText(content);
-    } catch (_) {
-      document.getElementById("output").select();
-      document.execCommand("copy");
-    }
-    showToast("✅ BB-код скопирован в буфер обмена");
+    try { await navigator.clipboard.writeText(content); }
+    catch (_) { document.getElementById("output").select(); document.execCommand("copy"); }
+    showToast("✅ BB-код скопирован");
   }
 
   function clearOutput() {
@@ -545,6 +750,7 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     showToast("🗑 Вывод очищен");
   }
 
+  /* ── Toast ────────────────────────────────────────────── */
   let toastTimer = null;
   function showToast(msg) {
     const el = document.getElementById("toast");
@@ -554,8 +760,28 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
   }
 
+  /* ── Helpers ──────────────────────────────────────────── */
+  function v(id)        { return document.getElementById(id).value.trim(); }
+  function set(id, val) { document.getElementById(id).value = val; }
+  function escHtml(s)   { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  /* ── Init ─────────────────────────────────────────────── */
   applyConfig();
-  addAttachment();
+  savedSnapshot = cfgSnapshot();
+
+  // Watch config fields for unsaved changes
+  CFG_FIELDS.forEach(id => document.getElementById(id).addEventListener("input", checkUnsaved));
+
+  // Watch draft fields
+  DRAFT_FIELDS.forEach(id => document.getElementById(id).addEventListener("input", scheduleDraftSave));
+
+  // Load draft (will add attachment rows from saved draft)
+  loadDraft();
+
+  // If no draft attachments were loaded, add a default row
+  if (!document.querySelector("#att-container .att-row")) {
+    addAttachment();
+  }
 </script>
 </body>
 </html>
