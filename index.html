@@ -31,7 +31,7 @@
     }
 
     /* ── Layout ─────────────────────────────────────────── */
-    .container { max-width: 960px; margin: 0 auto; }
+    .container { max-width: 100%; }
 
     /* ── Header ─────────────────────────────────────────── */
     header {
@@ -368,7 +368,6 @@
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('editor')">✏️ Редактор</button>
   <button class="tab-btn" onclick="switchTab('preview')">👁 Предпросмотр</button>
-  <button class="tab-btn" onclick="switchTab('bbcode')">📄 BB-код</button>
 </div>
 
 <!-- ═══════════════ TAB: EDITOR ═══════════════ -->
@@ -446,7 +445,18 @@
   <!-- ДЕЙСТВИЯ -->
   <div class="actions">
     <button class="btn btn-orange" onclick="generate()">⚡ Сгенерировать</button>
-    <button class="btn btn-ghost"  onclick="clearForm()">🗑 Очистить форму</button>
+    <button class="btn btn-purple" onclick="copyToClipboard()">📋 Скопировать в буфер</button>
+    <button class="btn btn-ghost"  onclick="clearOutput()">🗑 Очистить вывод</button>
+    <button class="btn btn-ghost"  onclick="clearForm()">✖ Очистить форму</button>
+  </div>
+
+  <!-- BB-КОД -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📄</span> Готовый BB-код</div>
+    <div class="output-wrap">
+      <textarea id="output" readonly placeholder="Нажмите «⚡ Сгенерировать»..."></textarea>
+      <button class="copy-inline-btn" onclick="copyToClipboard()" title="Скопировать">📋</button>
+    </div>
   </div>
 
 </div><!-- /tab-editor -->
@@ -457,21 +467,6 @@
     <div class="card-title"><span class="icon">👁</span> Предпросмотр рапорта</div>
     <div id="preview-box">
       <div id="preview-empty">Сначала заполните форму и нажмите «⚡ Сгенерировать»</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ TAB: BBCODE ═══════════════ -->
-<div id="tab-bbcode" class="tab-panel">
-  <div class="actions">
-    <button class="btn btn-purple" onclick="copyToClipboard()">📋 Скопировать в буфер</button>
-    <button class="btn btn-gray"   onclick="clearOutput()">🗑 Очистить вывод</button>
-  </div>
-  <div class="card">
-    <div class="card-title"><span class="icon">📄</span> Готовый BB-код</div>
-    <div class="output-wrap">
-      <textarea id="output" readonly placeholder="Нажмите «⚡ Сгенерировать» на вкладке редактора..."></textarea>
-      <button class="copy-inline-btn" onclick="copyToClipboard()" title="Скопировать">📋</button>
     </div>
   </div>
 </div>
@@ -715,7 +710,7 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
       </div>
     `;
 
-    showToast("✅ Готово — переключитесь на вкладку");
+    showToast("✅ BB-код сгенерирован");
   }
 
   /* ── Clear form ───────────────────────────────────────── */
