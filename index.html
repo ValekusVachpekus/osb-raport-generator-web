@@ -481,9 +481,19 @@
       <span class="unsaved-hint" id="unsaved-hint">— несохранённые изменения</span>
     </div>
 
-    <div class="field-group">
-      <label class="field-label" for="position_fio">Должность и ФИО полностью</label>
-      <input type="text" id="position_fio" placeholder="оперуполномоченный ОСБ Иванов Иван Иванович" />
+    <div class="row">
+      <div class="field-sm field-group">
+        <label class="field-label" for="position">Должность</label>
+        <input type="text" id="position" placeholder="оперуполномоченный" />
+      </div>
+      <div class="field-sm field-group">
+        <label class="field-label" for="rank">Звание</label>
+        <input type="text" id="rank" placeholder="капитана полиции" />
+      </div>
+      <div class="field field-group">
+        <label class="field-label" for="position_fio">ФИО</label>
+        <input type="text" id="position_fio" placeholder="Иванов Иван Иванович" />
+      </div>
     </div>
 
     <div class="row" style="margin-top:10px;">
@@ -520,8 +530,13 @@
           </div>
         </div>
       </div>
-      <input type="text" id="subject" placeholder="нарушении п. X устава ОВД..." />
+      <input type="text" id="subject" placeholder="нарушении устава ОВД..." />
       <div class="field-error" id="err-subject">Обязательное поле</div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="violations">Пункты нарушений (через запятую)</label>
+      <input type="text" id="violations" placeholder="4.1, 12.1, 15.3" />
     </div>
 
     <div class="field-group">
@@ -671,7 +686,7 @@
   }
 
   /* ── Unsaved indicator ────────────────────────────────── */
-  const CFG_FIELDS = ["position_fio","signature","fio_short"];
+  const CFG_FIELDS = ["position","rank","position_fio","signature","fio_short"];
   let savedSnapshot = "";
 
   function cfgSnapshot() {
@@ -688,7 +703,7 @@
   }
 
   /* ── Draft autosave ───────────────────────────────────── */
-  const DRAFT_FIELDS = ["subject","basis","request","usb_url"];
+  const DRAFT_FIELDS = ["subject","violations","basis","request","usb_url"];
   let draftTimer = null;
 
   function saveDraft() {
@@ -798,10 +813,17 @@
       return;
     }
 
-    const positionFio = v("position_fio") || "[Должность и ФИО не указаны]";
+    const position    = v("position")     || "[должность]";
+    const rank        = v("rank")         || "[звание]";
+    const positionFio = v("position_fio") || "[ФИО]";
     const signature   = v("signature")    || "________________";
     const fioShort    = v("fio_short")    || "[ФИО]";
     const subject     = v("subject");
+    let violations    = v("violations").trim();
+    if (violations) {
+      violations = violations.split(",").map(p => "п. " + p.trim()).join(", ");
+      violations = " " + violations;
+    }
     const basis       = document.getElementById("basis").value.trim();
     const request     = document.getElementById("request").value.trim();
     const usbUrl      = v("usb_url");
@@ -825,10 +847,10 @@
 
     const bb =
 `[RIGHT][SIZE=15px][FONT=Times New Roman]Руководству ГАИ по Нижегородской области[/FONT][/SIZE]
-[FONT=Times New Roman][SIZE=15px]от ${positionFio}[/SIZE][/FONT]
+[FONT=Times New Roman][SIZE=15px]от ${position} ${rank} ${positionFio}[/SIZE][/FONT]
 [/RIGHT]
 [HEADING=2][CENTER][FONT=Times New Roman][SIZE=15px][B]РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ[/B][/SIZE][/FONT][/CENTER][/HEADING]
-[CENTER][FONT=Times New Roman][SIZE=15px]о ${subject}[/SIZE][/FONT]
+[CENTER][FONT=Times New Roman][SIZE=15px]о ${subject}${violations}[/SIZE][/FONT]
 [/CENTER]
 [FONT=Times New Roman][SIZE=15px][B]Основание рапорта: [/B]${basis}[/SIZE][/FONT]
 [RIGHT][/RIGHT]
@@ -853,10 +875,10 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     document.getElementById("preview-box").innerHTML = `
       <div class="pre-right">
         Руководству ГАИ по Нижегородской области<br>
-        от ${escHtml(positionFio)}
+        от ${escHtml(position)} ${escHtml(rank)} ${escHtml(positionFio)}
       </div>
       <div class="pre-heading">РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ</div>
-      <div class="pre-center">о ${escHtml(subject)}</div>
+      <div class="pre-center">о ${escHtml(subject)}${violations ? escHtml(violations) : ""}</div>
       <div class="pre-block"><b>Основание рапорта:</b> ${escHtml(basis).replace(/\n/g,"<br>")}</div>
       <div class="pre-block"><b>Прошу руководство ГАИ:</b> ${escHtml(request).replace(/\n/g,"<br>")}</div>
       <div class="pre-block"><b>Приложения:</b><br>${attHtml}</div>
