@@ -547,7 +547,7 @@
 
     <div class="field-group">
       <div class="field-label-row">
-        <label class="field-label" for="request">Прошу руководство ГАИ <span style="color:#ef4444">*</span></label>
+        <label class="field-label" for="request">Прошу руководство ГУ МВД <span style="color:#ef4444">*</span></label>
         <div class="tpl-wrap">
           <button class="btn btn-ghost btn-sm" onclick="toggleTplMenu(event)">📋 Шаблоны ▾</button>
           <div class="tpl-menu" id="tpl-menu">
@@ -846,7 +846,7 @@
     const attachmentsBb = attLines.join("\n");
 
     const bb =
-`[RIGHT][SIZE=15px][FONT=Times New Roman]Руководству ГАИ по Нижегородской области[/FONT][/SIZE]
+`[RIGHT][SIZE=15px][FONT=Times New Roman]Руководству ГУ МВД по Нижегородской области[/FONT][/SIZE]
 [FONT=Times New Roman][SIZE=15px]от ${position} ${rank} ${positionFio}[/SIZE][/FONT]
 [/RIGHT]
 [HEADING=2][CENTER][FONT=Times New Roman][SIZE=15px][B]РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ[/B][/SIZE][/FONT][/CENTER][/HEADING]
@@ -854,7 +854,7 @@
 [/CENTER]
 [FONT=Times New Roman][SIZE=15px][B]Основание рапорта: [/B]${basis}[/SIZE][/FONT]
 [RIGHT][/RIGHT]
-[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Прошу руководство ГАИ: [/B]${request}[/SIZE][/FONT][/SIZE][/FONT]
+[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Прошу руководство ГУ МВД: [/B]${request}[/SIZE][/FONT][/SIZE][/FONT]
 [RIGHT][/RIGHT]
 [FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Приложения:[/B]
 ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
@@ -874,13 +874,13 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
 
     document.getElementById("preview-box").innerHTML = `
       <div class="pre-right">
-        Руководству ГАИ по Нижегородской области<br>
+        Руководству ГУ МВД по Нижегородской области<br>
         от ${escHtml(position)} ${escHtml(rank)} ${escHtml(positionFio)}
       </div>
       <div class="pre-heading">РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ</div>
       <div class="pre-center">о ${escHtml(subject)}${violations ? escHtml(violations) : ""}</div>
       <div class="pre-block"><b>Основание рапорта:</b> ${escHtml(basis).replace(/\n/g,"<br>")}</div>
-      <div class="pre-block"><b>Прошу руководство ГАИ:</b> ${escHtml(request).replace(/\n/g,"<br>")}</div>
+      <div class="pre-block"><b>Прошу руководство ГУ МВД:</b> ${escHtml(request).replace(/\n/g,"<br>")}</div>
       <div class="pre-block"><b>Приложения:</b><br>${attHtml}</div>
       <div class="pre-right" style="margin-top:16px;">
         Дата: «${escHtml(day)}» ${escHtml(month)} ${escHtml(yearFull)} г.<br>
