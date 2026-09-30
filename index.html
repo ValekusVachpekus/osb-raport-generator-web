@@ -547,7 +547,7 @@
 
     <div class="field-group">
       <div class="field-label-row">
-        <label class="field-label" for="request">Прошу руководство ГУ МВД <span style="color:#ef4444">*</span></label>
+        <label class="field-label" for="request">Прошу руководство главного управления МВД <span style="color:#ef4444">*</span></label>
         <div class="tpl-wrap">
           <button class="btn btn-ghost btn-sm" onclick="toggleTplMenu(event)">📋 Шаблоны ▾</button>
           <div class="tpl-menu" id="tpl-menu">
@@ -570,11 +570,6 @@
   <!-- ПРИЛОЖЕНИЯ -->
   <div class="card">
     <div class="card-title"><span class="icon">📎</span> Приложения</div>
-
-    <div class="field-group">
-      <label class="field-label" for="usb_url">Перенос доказательств на USB-Flash — URL</label>
-      <input type="url" id="usb_url" placeholder="https://..." />
-    </div>
 
     <div class="section-sub">Фото / видео фиксации</div>
     <div id="att-container"></div>
@@ -703,7 +698,7 @@
   }
 
   /* ── Draft autosave ───────────────────────────────────── */
-  const DRAFT_FIELDS = ["subject","violations","basis","request","usb_url"];
+  const DRAFT_FIELDS = ["subject","violations","basis","request"];
   let draftTimer = null;
 
   function saveDraft() {
@@ -826,7 +821,6 @@
     }
     const basis       = document.getElementById("basis").value.trim();
     const request     = document.getElementById("request").value.trim();
-    const usbUrl      = v("usb_url");
 
     const now = new Date();
     const day = String(now.getDate());
@@ -840,13 +834,12 @@
       if (name && url)  attLines.push(`[URL=${url}]${name}[/URL]`);
       else if (name)    attLines.push(`${name} — [ссылка не указана]`);
     });
-    if (usbUrl) attLines.push(`[URL=${usbUrl}]Перенос доказательств на USB-Flash[/URL]`);
-    else        attLines.push("Перенос доказательств на USB-Flash — [ссылка не указана]");
 
     const attachmentsBb = attLines.join("\n");
 
     const bb =
-`[RIGHT][SIZE=15px][FONT=Times New Roman]Руководству ГУ МВД по Нижегородской области[/FONT][/SIZE]
+`[TABLE][TR][TD]
+[RIGHT][SIZE=15px][FONT=Times New Roman]Руководству ГУ МВД по Нижегородской области[/FONT][/SIZE]
 [FONT=Times New Roman][SIZE=15px]от ${position} ${rank} ${positionFio}[/SIZE][/FONT]
 [/RIGHT]
 [HEADING=2][CENTER][FONT=Times New Roman][SIZE=15px][B]РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ[/B][/SIZE][/FONT][/CENTER][/HEADING]
@@ -854,14 +847,16 @@
 [/CENTER]
 [FONT=Times New Roman][SIZE=15px][B]Основание рапорта: [/B]${basis}[/SIZE][/FONT]
 [RIGHT][/RIGHT]
-[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Прошу руководство ГУ МВД: [/B]${request}[/SIZE][/FONT][/SIZE][/FONT]
+[FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Прошу руководство главного управления МВД: [/B]${request}[/SIZE][/FONT][/SIZE][/FONT]
 [RIGHT][/RIGHT]
 [FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px][B]Приложения:[/B]
 ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
 [RIGHT]
 [FONT=Times New Roman][SIZE=15px][FONT=Times New Roman][SIZE=15px]Дата: «${day}[B]» ${month} [/B]${yearFull} г.[/SIZE][/FONT]
 [SIZE=15px][FONT=Times New Roman]Подпись: ${signature} / ${fioShort}[/FONT][/SIZE][/SIZE][/FONT]
-[/RIGHT]`;
+[/RIGHT]
+[/TD][/TR][/TABLE]
+[CENTER][SIZE=12px][FONT=Arial][non_personal][/non_personal][/FONT][/SIZE][/CENTER]`;
 
     document.getElementById("output").value = bb;
 
@@ -873,6 +868,7 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
     }).join("");
 
     document.getElementById("preview-box").innerHTML = `
+      <div style="border:1px solid #999;padding:16px;">
       <div class="pre-right">
         Руководству ГУ МВД по Нижегородской области<br>
         от ${escHtml(position)} ${escHtml(rank)} ${escHtml(positionFio)}
@@ -880,11 +876,12 @@ ${attachmentsBb}[/SIZE][/FONT][/SIZE][/FONT]
       <div class="pre-heading">РАПОРТ О ДИСЦИПЛИНАРНОМ ПРОСТУПКЕ</div>
       <div class="pre-center">о ${escHtml(subject)}${violations ? escHtml(violations) : ""}</div>
       <div class="pre-block"><b>Основание рапорта:</b> ${escHtml(basis).replace(/\n/g,"<br>")}</div>
-      <div class="pre-block"><b>Прошу руководство ГУ МВД:</b> ${escHtml(request).replace(/\n/g,"<br>")}</div>
+      <div class="pre-block"><b>Прошу руководство главного управления МВД:</b> ${escHtml(request).replace(/\n/g,"<br>")}</div>
       <div class="pre-block"><b>Приложения:</b><br>${attHtml}</div>
       <div class="pre-right" style="margin-top:16px;">
         Дата: «${escHtml(day)}» ${escHtml(month)} ${escHtml(yearFull)} г.<br>
         Подпись: ${escHtml(signature)} / ${escHtml(fioShort)}
+      </div>
       </div>
     `;
 
